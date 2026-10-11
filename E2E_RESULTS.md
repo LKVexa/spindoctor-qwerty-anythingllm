@@ -57,4 +57,15 @@ engine development folders or tools. The README install step was followed: `spin
 
 ## Post-push verification
 
-Recorded in the final commit of this file after the repository was cloned back from GitHub.
+After the push (content commit `bc6e60d`), the public repository was cloned back from GitHub into a fresh folder with an empty HOME, and
+`spindoctor-qwerty/` was copied into a fresh `<STORAGE_DIR>/plugins/agent-skills/` as the README says:
+
+| Check | Result |
+|---|---|
+| Cloned tree vs staged tree | 54/54 files present, byte-identical, no extra files |
+| `tests/check_manifest.py` | VALID |
+| `node tests/handler_test.js` | 12/12 |
+| End-to-end through AnythingLLM's loader on the installed clone | 12/12 (PASS) |
+
+Commits are made through the GitHub connector and show the LKVexa account as committer. The author of the work is
+RUSSELL PHILIP SMITHSON <russellsmithson77@outlook.com> (see NOTICE and COPYRIGHT).
