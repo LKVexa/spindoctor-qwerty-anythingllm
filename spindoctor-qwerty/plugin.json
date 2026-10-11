@@ -1,0 +1,62 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Mintplex-Labs/anything-llm/refs/heads/master/server/utils/agents/imported-manifest.schema.json",
+  "active": true,
+  "hubId": "spindoctor-qwerty",
+  "name": "SpinDoctor Qwerty",
+  "schema": "skill-1.0.0",
+  "version": "1.1.0",
+  "description": "Run the SpinDoctor 3.1.2 quantum-circuit SIMULATOR (classical FP64 on this computer, not a quantum computer, no quantum advantage; 1-298 logical qubits, 59 per entangled factor). action=script runs q.* commands (one per line, including q.folder run path=\"...\"), action=preset runs qc-001..qc-241, action=list lists presets, action=report shows reports, action=functions shows the function table (show it verbatim), action=theory tests a theory (input = JSON with source file/text/chat, hypothesis, prediction, script, checks, excerpts). Every command writes TXT/PDF/JSON reports.",
+  "author": "RUSSELL PHILIP SMITHSON <russellsmithson77@outlook.com>",
+  "author_url": "https://github.com/LKVexa/spindoctor-qwerty-anythingllm",
+  "license": "GPL-3.0-or-later",
+  "setup_args": {
+    "PYTHON": {
+      "type": "string",
+      "required": false,
+      "input": {
+        "type": "text",
+        "default": "",
+        "placeholder": "python3 (Linux/macOS) or python (Windows)",
+        "hint": "Python 3.8+ executable for the bundled SpinDoctor engine. Leave empty to use python3 (python on Windows)."
+      }
+    },
+    "WORKSPACE": {
+      "type": "string",
+      "required": false,
+      "input": {
+        "type": "text",
+        "default": "",
+        "placeholder": "~/spindoctor-workspace",
+        "hint": "Folder for SpinDoctor state and TXT/PDF/JSON reports. Leave empty for the default (~/spindoctor-workspace or $SPINDOCTOR_WORKSPACE)."
+      }
+    }
+  },
+  "examples": [
+    {
+      "prompt": "Build a Bell circuit and run 1000 shots with SpinDoctor",
+      "call": "{\"action\": \"script\", \"input\": \"q.circuit new bell 2\\nq.circuit add h 0\\nq.circuit add cx 0 1\\nq.circuit run shots 1000 basis z\"}"
+    },
+    {
+      "prompt": "What can SpinDoctor do? Show me the functions",
+      "call": "{\"action\": \"functions\", \"input\": \"commands\"}"
+    },
+    {
+      "prompt": "Test the theory we discussed: H then CNOT gives only 00 and 11",
+      "call": "{\"action\": \"theory\", \"input\": \"{\\\"action\\\": \\\"run\\\", \\\"source\\\": \\\"chat\\\", \\\"text\\\": \\\"Theory: H(0) then CX(0,1) gives a Bell state. Prediction: only 00 and 11, ~0.5 each.\\\", \\\"excerpts\\\": [\\\"User: H then CNOT should only give 00 and 11\\\"], \\\"hypothesis\\\": \\\"H+CNOT makes a Bell state\\\", \\\"prediction\\\": \\\"P(00)=P(11)=0.5 +/- 0.05\\\", \\\"script\\\": \\\"q.circuit new b 2\\\\nq.circuit add h 0\\\\nq.circuit add cx 0 1\\\\nq.circuit run shots 2000 basis z\\\", \\\"checks\\\": [{\\\"kind\\\": \\\"probability\\\", \\\"outcome\\\": \\\"00\\\", \\\"expected\\\": 0.5, \\\"tolerance\\\": 0.05}]}\"}"
+    }
+  ],
+  "entrypoint": {
+    "file": "handler.js",
+    "params": {
+      "action": {
+        "description": "One of: script, preset, list, report, functions, theory",
+        "type": "string"
+      },
+      "input": {
+        "description": "script: q.* commands, one per line; preset: preset id, optionally followed by name=value overrides (e.g. 'qc-061 shots=500'); list: filter text; report: report name (empty lists recent reports); functions: section (commands|gates|tools|presets|all) and an optional filter; theory: a JSON object with the spindoctor_test_theory fields (action, source file|text|chat, path, text, excerpts, hypothesis, prediction, script, checks)",
+        "type": "string"
+      }
+    }
+  },
+  "imported": true
+}
